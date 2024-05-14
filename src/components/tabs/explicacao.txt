@@ -1,0 +1,46 @@
+tenho um componente que é tabs do mui materia react que tem um array de itens que tem a propriedade nome, esse array tem outro componente
+accordion dentro desse accodion tem um fomulario que tem um campo textarea e um formulario do que tem um campo input para nome e email
+estes formulario pode ser adicionado varias vezer clicando no botao de adicionar, voce conseguiria fazer para mim um exemplo
+
+src/
+├── components/
+│   ├── DynamicForm.tsx
+│   ├── DynamicSubForm.tsx
+│   ├── TabContent.tsx
+│   ├── TabsWithAccordion.tsx
+├── context/
+│   └── FormsContext.tsx
+└── App.tsx
+
+Explicação
+FormsContext.tsx: Define o contexto e o provedor para gerenciar os formulários dinamicamente. Adiciona tipagem para os valores do contexto.
+
+DynamicForm.tsx: Componente individual do formulário utilizando React Hook Form com a validação Zod, agora tipado com TypeScript.
+
+TabContent.tsx: Renderiza o Accordion com apenas um formulário por Accordion. O botão de adicionar formulário foi movido para fora do Accordion.
+
+TabsWithAccordion.tsx: Componente principal que gerencia as abas e exibe o conteúdo da aba selecionada. Adiciona tipagem para as props e eventos.
+
+App.tsx: Componente principal que envolve a aplicação com o FormsProvider para fornecer o contexto aos componentes filhos. Adiciona tipagem para o componente.
+
+Este código organiza os componentes em arquivos separados, usa React Hook Form, useContext, a biblioteca Zod para validação dos formulários e adiciona suporte para TypeScript, além de ajustar a estrutura dos componentes conforme solicitado.
+
+++++++++++++++++++++++++++++++++++++++++++++++
+Ajuste no FormsContext.tsx
+Vamos garantir que ao adicionar um novo formulário, ele tenha um array subForms inicializado.
+
+context/FormsContext.tsx
+
++++++++++++++++++++++++
+
+Revisar TabContent.tsx
+Certifique-se de que os formulários dinâmicos são renderizados corretamente no componente TabContent.
+
+components/TabContent.tsx
+
+___________________________________________
+Com essas alterações, a aplicação agora deve ser capaz de:
+
+Renderizar múltiplos formulários dentro de cada aba.
+Adicionar e remover sub-formulários dinâmicos (Profissão e Tempo de Experiência) dentro de cada formulário principal.
+Manter a integridade do estado através do uso do React Hook Form, Zod, e Context API.
