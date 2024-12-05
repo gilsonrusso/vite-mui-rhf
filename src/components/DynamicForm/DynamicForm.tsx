@@ -1,16 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormsContext } from "../context/FormsContext";
 import DynamicSubForm from "./DynamicSubForm";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().email("Email inválido"),
-  text: z.string().min(1, "Texto é obrigatório"),
-});
+import { FormsContext } from "./FormsContext";
+import { formSchema } from "./schema";
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -29,11 +24,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      text: "",
+      subForms: [],
+    },
   });
-
-  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
 
   const context = useContext(FormsContext);
 
@@ -41,7 +41,24 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     return null;
   }
 
-  const { forms, addSubForm, removeSubForm } = context;
+  const { forms, addSubForm, removeSubForm, updateForm } = context;
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    updateForm(tabIndex, index, data);
+    console.log(data);
+  };
+
+  const form = forms[tabIndex][index];
+
+  // Set default values
+  useEffect(() => {
+    if (form) {
+      setValue("name", form.name);
+      setValue("email", form.email);
+      setValue("text", form.text);
+      setValue("subForms", form.subForms);
+    }
+  }, [form, setValue]);
 
   return (
     <Box

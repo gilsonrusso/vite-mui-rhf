@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useContext } from "react";
-import { FormsContext } from "../context/FormsContext";
 import DynamicForm from "./DynamicForm";
+import { FormsContext } from "./FormsContext";
 
 interface TabContentProps {
   tabIndex: number;

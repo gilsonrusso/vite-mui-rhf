@@ -1,13 +1,10 @@
 import { createContext, ReactNode, useState } from "react";
+import { z } from "zod";
+import { formSchema, subFormSchema } from "./schema";
 
-interface SubForm {
-  profession: string;
-  experience: string;
-}
+interface SubForm extends z.infer<typeof subFormSchema> {}
 
-interface Form {
-  subForms: SubForm[];
-}
+interface Form extends z.infer<typeof formSchema> {}
 
 interface FormsContextType {
   forms: Array<Array<Form>>;
@@ -19,6 +16,7 @@ interface FormsContextType {
     formIndex: number,
     subFormIndex: number
   ) => void;
+  updateForm: (tabIndex: number, formIndex: number, updatedForm: Form) => void;
 }
 
 const FormsContext = createContext<FormsContextType | undefined>(undefined);
@@ -38,7 +36,12 @@ const FormsProvider = ({ children }: { children: ReactNode }) => {
     ensureTabInitialized(tabIndex);
     if (!forms[tabIndex][formIndex]) {
       const newForms = [...forms];
-      newForms[tabIndex][formIndex] = { subForms: [] };
+      newForms[tabIndex][formIndex] = {
+        name: "",
+        email: "",
+        text: "",
+        subForms: [],
+      };
       setForms(newForms);
     }
   };
@@ -46,7 +49,10 @@ const FormsProvider = ({ children }: { children: ReactNode }) => {
   const addForm = (tabIndex: number) => {
     ensureTabInitialized(tabIndex);
     const newForms = [...forms];
-    newForms[tabIndex] = [...newForms[tabIndex], { subForms: [] }];
+    newForms[tabIndex] = [
+      ...newForms[tabIndex],
+      { name: "", email: "", text: "", subForms: [] },
+    ];
     setForms(newForms);
   };
 
@@ -82,9 +88,27 @@ const FormsProvider = ({ children }: { children: ReactNode }) => {
     setForms(newForms);
   };
 
+  const updateForm = (
+    tabIndex: number,
+    formIndex: number,
+    updatedForm: Form
+  ) => {
+    ensureFormInitialized(tabIndex, formIndex);
+    const newForms = [...forms];
+    newForms[tabIndex][formIndex] = updatedForm;
+    setForms(newForms);
+  };
+
   return (
     <FormsContext.Provider
-      value={{ forms, addForm, removeForm, addSubForm, removeSubForm }}
+      value={{
+        forms,
+        addForm,
+        removeForm,
+        addSubForm,
+        removeSubForm,
+        updateForm,
+      }}
     >
       {children}
     </FormsContext.Provider>

@@ -2,12 +2,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import { subFormSchema } from "./schema";
 
-const subFormSchema = z.object({
-  profession: z.string().min(1, "Profissão é obrigatória"),
-  experience: z.string().min(1, "Tempo de experiência é obrigatório"),
-});
+import { z } from "zod";
 
 type SubFormData = z.infer<typeof subFormSchema>;
 
